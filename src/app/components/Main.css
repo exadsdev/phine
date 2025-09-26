@@ -1,27 +1,37 @@
-.main-images {
-  display: none;
-}
+import React from "react";
+import Image from "next/image";
+import "./Main.css";
 
-@media (max-width: 768px) {
-  .main-images {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background-color: #f8f9fa;
-  }
+export default function Main() {
+  const rawBase = process.env.NEXT_PUBLIC_IMG_BASE_URL ;
+  const baseURL = String(rawBase || "").replace(/\/+$/, ""); // กัน null/undefined
 
-  .image-wrapper {
-    position: relative;
-    width: 100%;
-    max-width: 500px;
-    aspect-ratio: 1/1;
-    overflow: hidden;
-    border-radius: 12px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-    transition: transform 0.2s ease-in-out;
-  }
+  const images = ["001.gif", "002.gif", "003.gif", "004.gif", "005.gif"];
 
-  .image-wrapper:hover {
-    transform: scale(1.02);
-  }
+  return (
+    <div className="main-images">
+      {images.map((img, i) => {
+        const file = typeof img === "string" ? img : "";
+        const altText = file.endsWith(".png") ? file.slice(0, -4) : (file || "image");
+        return (
+          <a
+            key={file || i}
+            href={baseURL}
+            className="image-wrapper"
+            target="_blank"
+          >
+         <Image
+  src={`${baseURL}/img/phone/${file}`}
+  alt={altText}
+  fill
+  sizes="100vw"
+  style={{ objectFit: "cover" }}
+  unoptimized={true} // ปิดการ optimize ทำให้โหลดจากทุกโดเมนได้
+/>
+
+          </a>
+        );
+      })}
+    </div>
+  );
 }
